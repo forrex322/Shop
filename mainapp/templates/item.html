@@ -1,0 +1,41 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% block content  %}
+
+    {% for el in products %}
+        <div class="col mb-5">
+    <div class="card h-100">
+        <a href="{{ el.get_absolute_url }}"><img class="card-img-top" src="{{ el.image.url }}" alt=""></a>
+        <!-- Product image-->
+<!--        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />-->
+<!--        &lt;!&ndash; Product details&ndash;&gt;-->
+<!--        <img src="{{ el.image.url }}" class="img-fluid">-->
+<!--        <img class="card-img-top" src="{% static el.image %}">-->
+        <div class="card-body p-4">
+            <div class="text-center">
+                <!-- Product name-->
+                <h5 class="fw-bolder">{{ el }}</h5>
+                <!-- Product price-->
+                <p>{{ el.price }} $</p>
+            </div>
+        </div>
+        <!-- Product actions-->
+        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{{ el.get_absolute_url }}">Specifications</a></div>
+        </div>
+    </div>
+</div>
+    {% endfor %}
+
+{% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>{{ message }}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+{% endif %}
+
+{% endblock content %}
+
