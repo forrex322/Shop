@@ -47,11 +47,10 @@ class ProductDetailView(CartMixin, DetailView):
 class AddToCartView(CartMixin, View):
 
     def get(self, request, *args, **kwargs):
-        ct_model, product_slug = kwargs.get("ct_model"), kwargs.get("slug")
-        content_type = ContentType.objects.get(model=ct_model)
-        product = content_type.model_class().objects.get(slug=product_slug)
+        product_slug = kwargs.get("slug")
+        product = Product.objects.get(slug=product_slug)
         cart_product, created = CartProduct.objects.get_or_create(
-            user=self.cart.owner, cart=self.cart, content_type=content_type, object_id=product.id
+            user=self.cart.owner, cart=self.cart, product=product
         )
         if created:
             self.cart.products.add(cart_product)
@@ -63,11 +62,10 @@ class AddToCartView(CartMixin, View):
 class DeleteFromCartView(CartMixin, View):
 
     def get(self, request, *args, **kwargs):
-        ct_model, product_slug = kwargs.get("ct_model"), kwargs.get("slug")
-        content_type = ContentType.objects.get(model=ct_model)
-        product = content_type.model_class().objects.get(slug=product_slug)
+        product_slug = kwargs.get("slug")
+        product = Product.objects.get(slug=product_slug)
         cart_product = CartProduct.objects.get(
-            user=self.cart.owner, cart=self.cart, content_type=content_type, object_id=product.id
+            user=self.cart.owner, cart=self.cart, product=product
         )
         self.cart.products.remove(cart_product)
         cart_product.delete()
@@ -79,11 +77,10 @@ class DeleteFromCartView(CartMixin, View):
 class ChangeQTYView(CartMixin, View):
 
     def post(self, request, *args, **kwargs):
-        ct_model, product_slug = kwargs.get("ct_model"), kwargs.get("slug")
-        content_type = ContentType.objects.get(model=ct_model)
-        product = content_type.model_class().objects.get(slug=product_slug)
+        product_slug = kwargs.get("slug")
+        product = Product.objects.get(slug=product_slug)
         cart_product = CartProduct.objects.get(
-            user=self.cart.owner, cart=self.cart, content_type=content_type, object_id=product.id
+            user=self.cart.owner, cart=self.cart, product=product
         )
         qty = int(request.POST.get('qty'))
         cart_product.qty = qty

@@ -23,6 +23,11 @@
         <!-- Product actions-->
         <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
             <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{{ el.get_absolute_url }}">Specifications</a></div>
+                <div class="text-center mt-3">
+                    <a href="{% url 'add_to_cart' slug=el.slug %}">
+                        <button class="btn btn-danger">Add to cart</button>
+                    </a>
+                </div>
         </div>
     </div>
 </div>
