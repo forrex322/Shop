@@ -20,10 +20,13 @@ class MaxResolutionErrorException(Exception):
 class Category(models.Model):
 
     name = models.CharField(max_length=256, verbose_name="Name of category")
-    slag = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True)
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('category_detail', kwargs={'slug': self.slug})
 
 
 class Product(models.Model):
@@ -61,7 +64,7 @@ class CartProduct(models.Model):
 
 #не працює картпродукт в адмінці
     def __str__(self):
-        print(self.content_object)
+        print(self.product)
         return "Product: {} (for cart)".format(self.product.title)
 
     def save(self, *args, **kwargs):

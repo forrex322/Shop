@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.views.generic import DetailView, View, ListView
 from django.http import HttpResponseRedirect
 
-from .models import  Product, Customer, Cart, CartProduct
+from .models import  Product, Customer, Cart, CartProduct, Category
 from .mixins import CartMixin
 from .forms import OrderForm
 from .utils import recal_cart
@@ -20,9 +20,11 @@ class BaseView(CartMixin, View):
 
     def get(self, request, *args, **kwargs):
         products = Product.objects.all()
+        categories = Category.objects.all()
         context = {
             "products": products,
-            "cart": self.cart
+            "cart": self.cart,
+            "categories": categories
         }
         return render(request, "item.html", context)
 
@@ -42,6 +44,21 @@ class ProductDetailView(CartMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return  context
+
+
+class CategoryDetailView(CartMixin, DetailView):
+
+    model = Category
+    queryset = Category.objects.all()
+    context_object_name = 'category'
+    template_name = 'category_detail.html'
+    slug_url_kwarg = 'slug'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['cart'] = self.cart
+        return context
+
 
 
 class AddToCartView(CartMixin, View):
@@ -93,9 +110,10 @@ class ChangeQTYView(CartMixin, View):
 class CartView(CartMixin, View):
 
     def get(self, request, *args, **kwargs):
-
+        categories = Category.objects.all()
         context = {
-            "cart": self.cart
+            "cart": self.cart,
+            "categories": categories
         }
         return render(request, "cart.html", context)
 
@@ -103,11 +121,12 @@ class CartView(CartMixin, View):
 class CheckoutView(CartMixin, View):
 
     def get(self, request, *args, **kwargs):
-
+        categories = Category.objects.all()
         form = OrderForm(request.POST or None)
         context = {
             "cart": self.cart,
-            "form": form
+            "form": form,
+            "categories": categories
         }
         return render(request, "checkout.html", context)
 
