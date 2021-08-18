@@ -37,7 +37,7 @@
                         </li>
                         {% if not request.user.is_authenticated %}
                         <li>
-                            <a class="nav-link text-dark" href="#">Авторизация</a>
+                            <a class="nav-link text-dark" href="{% url 'login' %}">Авторизация</a>
                         </li>
                         <li>
                             <a class="nav-link text-dark" href="#">Регистрация</a>
