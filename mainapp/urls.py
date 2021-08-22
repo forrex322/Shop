@@ -13,7 +13,8 @@ from .views import (
     MakeOrderView,
     CategoryDetailView,
     LoginView,
-    RegistrationView
+    RegistrationView,
+    ProfileView
 )
 
 urlpatterns = [
@@ -28,5 +29,6 @@ urlpatterns = [
     path("make-order", MakeOrderView.as_view(), name="make_order"),
     path("login/", LoginView.as_view(), name="login"),
     path("registration/", RegistrationView.as_view(), name="registration"),
-    path('logout/', LogoutView.as_view(next_page="/"), name="logout")
+    path('logout/', LogoutView.as_view(next_page="/"), name="logout"),
+    path('profile/', ProfileView.as_view(), name="profile")
 ]
