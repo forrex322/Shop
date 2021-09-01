@@ -1,8 +1,9 @@
 from django.test import SimpleTestCase
 from django.urls import reverse, resolve
-from Shop.mainapp.views import BaseView, test_view
+# from Shop.mainapp.views import BaseView, test_view
+from Shop.mainapp.views import BaseView
 
-#для того щоб тести запустились я удалив файл __init__.py з папки mainapp
+# для того щоб тести запустились я удалив файл __init__.py з папки mainapp
 
 #TODO: дописати тести
 
