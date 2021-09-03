@@ -22,5 +22,5 @@ class NewCategoryView(View):
         context = {'form': form}
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/product-specs/')
+            return HttpResponseRedirect('/product-features/')
         return render(request, 'new_category.html', context)
