@@ -1,5 +1,5 @@
 from django.test import TestCase
-from Shop.mainapp.models import Product
+from mainapp.models import Product
 
 class ProductTestCaset(TestCase):
 

@@ -98,7 +98,7 @@ class ProductFeatures(models.Model):
     )
 
     def __str__(self):
-        return f'Категория - "{self.caregory.name}" | Характеристика - "{self.feature_name}"'
+        return f'Категория - "{self.category.name}" | Характеристика - "{self.feature_name}"'
 
 
 class ProductFeaturesValidators(models.Model):
