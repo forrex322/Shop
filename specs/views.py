@@ -1,12 +1,18 @@
 from django.shortcuts import render
 from django.views import View
 from django.http import HttpResponseRedirect
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test, login_required
 from django.utils.decorators import method_decorator
 
-from .forms import NewCategoryForm, CategoryFeature, NewCategoryFeatureKeyForm
 
-@method_decorator(login_required, name='dispatch')
+from .forms import NewCategoryForm, CategoryFeature, NewCategoryFeatureKeyForm
+from .models import *
+from mainapp.models import Category, Product
+
+# Декоратор для проверки является ли пользователь залогиненым
+# @method_decorator(login_required, name='dispatch')
+# Декоратор для проверки является ли пользователь админом
+@method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')
 class BaseSpecView(View):
 
     def get(self, request, *args, **kwargs):
@@ -46,3 +52,11 @@ class CreateNewFeature(View):
             return HttpResponseRedirect('/product-features/')
         context = {'form': form}
         return render(request, 'new_feature.html', context)
+
+
+class CreateNewFeatureValidator(View):
+
+    def get(self, request, *args, **kwargs):
+        categories = Category.objects.all()
+        context = {'categories': categories}
+        return render(request, 'new_validator.html', context)
