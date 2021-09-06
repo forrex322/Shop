@@ -12,4 +12,6 @@ class TestUrls(SimpleTestCase):
     def test_base_url_is_resolved(self):
         url = reverse('base')
         print(resolve(url))
-        self.assertEquals(resolve(url).func, BaseView)
+        print(BaseView.as_view())
+        self.assertEquals(resolve(url).func, BaseView.as_view())
+        # self.assertEqual(1, 1)
