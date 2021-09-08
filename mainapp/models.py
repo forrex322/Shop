@@ -46,6 +46,7 @@ class Product(models.Model):
     image = models.ImageField(upload_to="products/%Y/%m/%d", blank=True, verbose_name="Image")
     description = models.TextField(blank=True, verbose_name="Description")
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Price")
+    features = models.ManyToManyField("specs.ProductFeatures", blank=True, related_name='features_for_product')
     available = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -58,6 +59,9 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         return reverse("product_detail", kwargs={"slug": self.slug})
+
+    def get_features(self):
+        return {f.feature.feature_name: ' '.join([f.value, f.feature.unit or ""]) for f in self.features.all()}
 
 
 class ProductFeatures(models.Model):

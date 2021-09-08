@@ -40,7 +40,7 @@ class ProductFeatures(models.Model):
     value = models.CharField(max_length=256, verbose_name='Значение')
 
     def __str__(self):
-        return f"Товар - {self.product.name.title} | " \
+        return f"Товар - {self.product.title} | " \
                f"Характеристика - {self.feature.feature_name} | " \
                f"Значение - {self.value}"
 

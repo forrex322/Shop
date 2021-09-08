@@ -28,11 +28,12 @@
 <div class="product-feature-choices">
 
 </div>
-<div class="product-feature-choices-values" style="margin-top: 10px;">
-
-</div>
 <input type="submit" class="btn btn-success" value="Создать" style="display: none; margin-top: 10px;" id="create-product-feature">
 {% endblock %}
+{% block massfeatures %}
+<div class="product-features" style="margin-top: 10px;">
+</div>
+{% endblock massfeatures %}
 {% block js %}
 <script>
     $(document).on('click', "#create-product-feature", function (){
@@ -50,7 +51,7 @@
             data: data,
             url: '/product-features/attach-new-product-feature/',
             success: function (data){
-                console.log('asdasd')
+                $(".product-features").append(data.result)
             }
         })
     })
@@ -74,16 +75,18 @@
         $(".product-feature-choices").css('display', 'block')
         $(".product-feature-choices-values").css('display', 'block')
         $('input[name="search-text"]').val("")
+        let category_id = $('select[name="category-validators"]').val()
         let data = {
-            product_id: productId
+            product_id: productId,
+            category_id: category_id
         }
         $.ajax({
             method: "GET",
             data:data,
             dataType: "json",
-            url: "/product-features/attach-feature/",
+            url: "/product-features/show-all-category-features-ajax/",
             success: function (data){
-                $(".product-feature-choices").append(data.features)
+                $(".product-features").append(data.result)
             }
         })
     }
@@ -155,6 +158,5 @@
             }
         })
     })
-
 </script>
 {% endblock js %}
