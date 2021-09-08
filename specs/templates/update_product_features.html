@@ -6,61 +6,86 @@
     <select class="form-select" name="category-validators" id="category-validators-id" aria-label="Default select example">
     <option selected>---</option>
         {% for category in categories %}
-          <option value="{{ category.id }}">{{ category.name }}</option>
-        {% endfor %}
+        <option value="{{ category.id }}">{{ category.name }}</option>
+        {% endfor %}}
     </select>
 </div>
     <div class="product-search-ajax" style="display: none; margin-top: 20px;">
-      <div class="form-group">
-        <label for="search-text">Поиск товара</label>
-        <input type="text" name='search-text' class="form-control" id="search-text" aria-describedby="emailHelp" placeholder="Введите слова для поиска">
-      </div>
+        <div class="form-group">
+            <label for="search-text">Поиск товара</label>
+            <input type="text" name="search-text" class="form-control" id="search-text" aria-describedby="emailHelp" placeholder="Введите слова для поиска">
+        </div>
     </div>
-    <div class="search-results">
+    <div class="search-result">
         <ul class="list-group" id="no-results" style="display: none">
             <li class="list-group-item list-group-item-light">По вашему запросу результатов не найдено</li>
         </ul>
         <ul class="list-group" id="search-product-results" style="padding-top: 10px;">
         </ul>
     </div>
-<div class="product" style="margin-top: 30px;">
+<div class="product" style="margin-top: 30px">
 </div>
-<div class="product-feature-choices">
-
-</div>
-<div class="product-feature-choices-values" style="margin-top: 10px;">
-
-</div>
-<input type="submit" class="btn btn-success" value="Создать" style="display: none; margin-top: 10px;" id="create-product-feature">
 {% endblock %}
+{% block productfeaturesupdate %}
+<div class="col-md-12 product-features-update-list">
+</div>
+{% endblock productfeaturesupdate %}
 {% block js %}
 <script>
-    $(document).on('click', "#create-product-feature", function (){
-        let product = $("#product-title").text()
-        let category_feature = $("#product-category-features-id option:selected").text()
-        let value = $("#product-category-features-choices-id option:selected").text()
-        let data = {
-            product: product,
-            category_feature: category_feature,
-            value: value
+    $(document).on('click', '#save-updated-features', function (){
+        let featureNames = [];
+        let featureCurrentValues = [];
+        let newFeatureValues = []
+       $('.feature-name').children('input').each(function () {
+           featureNames.push(this.value); // "this" is the current element in the loop
+       })
+       $('.feature-current-value').children('input').each(function () {
+            featureCurrentValues.push(this.value)
+        })
+       console.log($("#product-category-features-id option:selected").text())
+       $('select[name="feature-value"] option:selected').each(function () {
+            newFeatureValues.push(this.text)
+      })
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
         }
+        let csrftoken = getCookie('csrftoken');
+        let data = {
+            features_names: featureNames,
+            features_current_values: featureCurrentValues,
+            new_feature_values: newFeatureValues,
+            product: $(".product").text(),
+            csrfmiddlewaretoken: csrftoken
+        }
+        $.ajaxSetup({ traditional: true });
         $.ajax({
-            method: "GET",
-            dataType: "json",
+            method: "POST",
             data: data,
-            url: '/product-features/attach-new-product-feature/',
+            url: '/product-features/update-product-features-ajax/',
             success: function (data){
-                console.log('asdasd')
+                window.location.href = '/product-features'
             }
         })
     })
     function removeProduct(){
         $(".search-results").css('display', 'block')
         $(".product-search-ajax").css('display', 'block')
-        $(".product-feature-choices").empty()
-        $(".product-feature-choices-values").empty()
+        $(".product-features-update-list").empty()
     }
     function getProduct(productId, title){
+        $(".product-features-update-list").css('display', 'block')
         $('.product').append(
             '<div class="alert alert-info alert-dismissible show" id="product-title" role="alert">' + title +
             '<button type="button" onclick="removeProduct()" ' +
@@ -81,40 +106,24 @@
             method: "GET",
             data:data,
             dataType: "json",
-            url: "/product-features/attach-feature/",
+            url: "/product-features/show-product-features-for-update/",
             success: function (data){
-                $(".product-feature-choices").append(data.features)
+                $(".product-features-update-list").append(
+                    data.result
+                )
             }
         })
     }
-    $(document).on('change', 'select[name="product-category-features"]', function (){
-        let data = {
-            category_id: this.value,
-            product_feature_name: $("#product-category-features-id option:selected").text()
-        }
-        $.ajax({
-            method: "GET",
-            dataType: "json",
-            data: data,
-            url: "/product-features/product-feature/",
-            success: function (data){
-                $(".product-feature-choices-values").append(data.features)
-            }
-        })
-    })
-    $(document).on('change', 'select[name="product-category-features-choices"]', function (){
-        $("#create-product-feature").css('display', 'block')
-    })
     $('select[name="category-validators"]').on('change', function() {
-    $(".product").empty()
-    $(".errors").empty()
-    $("#search-product-results").empty()
-    $(".product-search-ajax").css('display', 'block')
+        $(".product").empty()
+        $("#search-product-results").empty()
+        $(".product-search-ajax").css('display', 'block')
     });
     $('input[name="search-text"]').on('input', function(){
     if(this.value.length == 0){
         $(".search-results").css('display', 'none')
     }else{
+        $('.product').empty()
         $(".search-results").css('display', 'block')
     }
     $("#search-product-results").empty()
@@ -155,6 +164,5 @@
             }
         })
     })
-
 </script>
 {% endblock js %}
