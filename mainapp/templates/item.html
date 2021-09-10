@@ -1,7 +1,20 @@
-
 {% extends 'base.html' %}
 {% load static %}
 {% block content  %}
+
+<!--<div class="container">-->
+<!--    <div class="row">-->
+<!--        <div class="col-lg-3 mt-5">-->
+<!--            <div class="list-group">-->
+<!--                {% for category in categories %}-->
+<!--                <a href="{{ category.get_absolut_url }}" class="list-group-item">{{ category.name }} ({{ category.product_set.count }})</a>-->
+<!--                {% endfor %}-->
+<!--            </div>-->
+<!--            {% block productfilter %}-->
+<!--            {% endblock productfilter %}-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 
     {% for el in products %}
         <div class="col mb-5">
