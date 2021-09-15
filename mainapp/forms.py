@@ -7,7 +7,7 @@ class OrderForm(forms.ModelForm):
 
     def __int__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['order_date'].label = 'Data when order was geted'
+        self.fields['order_date'].label = 'Дата получения заказа'
 
     order_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}))
 

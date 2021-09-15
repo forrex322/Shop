@@ -1,5 +1,10 @@
+import operator
+
+from functools import reduce
+from itertools import chain
+
 from django.db import transaction
-from django.contrib.contenttypes.models import ContentType
+from django.db.models import Q
 from django.contrib import messages
 from django.shortcuts import render
 from django.views.generic import DetailView, View, ListView
@@ -11,13 +16,18 @@ from .mixins import CartMixin
 from .forms import OrderForm, LoginForm, RegistrationForm
 from .utils import recal_cart
 
+from specs.models import ProductFeatures
+
 
 # Create your views here.
 
 
-class BaseView(CartMixin, View):
+class MyQ(Q):
 
-    models = ["notebook", "smartphone"]
+    default = 'OR'
+
+
+class BaseView(CartMixin, View):
 
     def get(self, request, *args, **kwargs):
         products = Product.objects.all()
@@ -46,6 +56,8 @@ class ProductDetailView(CartMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['categories'] = self.get_object().category.__class__.objects.all()
+        context['cart'] = self.cart
         return  context
 
 
@@ -59,7 +71,34 @@ class CategoryDetailView(CartMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        query = self.request.GET.get('search')
+        category = self.get_object()
         context['cart'] = self.cart
+        context['categories'] = self.model.objects.all()
+        if not query and not self.request.GET:
+            context['category_products'] = category.product_set.all()
+            return context
+        if query:
+            products = category.product_set.filter(Q(title__icontains=query))
+            context['category_products'] = products
+            return context
+        url_kwargs = {}
+        for item in self.request.GET:
+            if len(self.request.GET.getlist(item)) > 1:
+                url_kwargs[item] = self.request.GET.getlist(item)
+            else:
+                url_kwargs[item] = self.request.GET.get(item)
+        q_condition_queries = Q()
+        for key, value in url_kwargs.items():
+            if isinstance(value, list):
+                q_condition_queries.add(Q(**{'value__in': value}), Q.OR)
+            else:
+                q_condition_queries.add(Q(**{'value': value}), Q.OR)
+        pf = ProductFeatures.objects.filter(
+            q_condition_queries
+        ).prefetch_related('product', 'feature').values('product_id')
+        products = Product.objects.filter(id__in=[pf_['product_id'] for pf_ in pf])
+        context['category_products'] = products
         return context
 
 

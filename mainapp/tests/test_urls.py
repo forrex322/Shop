@@ -1,7 +1,6 @@
 from django.test import SimpleTestCase
 from django.urls import reverse, resolve
-# from Shop.mainapp.views import BaseView, test_view
-from Shop.mainapp.views import BaseView
+from mainapp.views import BaseView
 
 # для того щоб тести запустились я удалив файл __init__.py з папки mainapp
 
@@ -13,4 +12,6 @@ class TestUrls(SimpleTestCase):
     def test_base_url_is_resolved(self):
         url = reverse('base')
         print(resolve(url))
-        self.assertEquals(resolve(url).func, BaseView)
+        print(BaseView.as_view())
+        self.assertEquals(resolve(url).func, BaseView.as_view())
+        # self.assertEqual(1, 1)

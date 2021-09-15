@@ -21,7 +21,8 @@ from django.contrib import admin
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("", include("mainapp.urls"))
+    path("", include("mainapp.urls")),
+    path("product-features/", include("specs.urls"))
 ]
 
 if settings.DEBUG:

@@ -6,7 +6,7 @@
 <nav aria-label="breadcrumb" class="pt-1">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="{% url 'base' %}">Home</a></li>
-    <li class="breadcrumb-item"><a href="#">{{ product.category.name }}</a></li>
+    <li class="breadcrumb-item"><a href="{{ product.category.get_absolute_url }}">{{ product.category.name }}</a></li>
     <li class="breadcrumb-item active" aria-current="page">{{ product.title }}</li>
   </ol>
 </nav>
@@ -22,6 +22,17 @@
         <hr>
         <a href="{% url 'add_to_cart' slug=product.slug %}"><button class="btn btn-danger">Add to cart</button></a>
     </div>
+    <p class="mt-4">Характеристики:</p>
+    <table class="table">
+        <tbody>
+        {% for f_name, f_value in product.get_features.items %}
+        <tr>
+            <th scope="row">{{ f_name }}</th>
+            <td>{{ f_value }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
 </div>
 
