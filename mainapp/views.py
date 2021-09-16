@@ -46,8 +46,6 @@ def test_view(request):
 
 class ProductDetailView(CartMixin, DetailView):
 
-    # model = Model
-    # queryset = Model.objects.all()
     model = Product
     queryset = Product.objects.all()
     context_object_name = "product"
@@ -58,6 +56,7 @@ class ProductDetailView(CartMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context['categories'] = self.get_object().category.__class__.objects.all()
         context['cart'] = self.cart
+        # print(context)
         return  context
 
 
