@@ -3,63 +3,37 @@
 
 {% block content %}
 
-<!--<nav aria-label="breadcrumb" class="pt-1">-->
-<!--  <ol class="breadcrumb">-->
-<!--    <li class="breadcrumb-item"><a href="{% url 'base' %}">Home</a></li>-->
-<!--    <li class="breadcrumb-item"><a href="{{ product.category.get_absolute_url }}">{{ product.category.name }}</a></li>-->
-<!--    <li class="breadcrumb-item active" aria-current="page">{{ product.title }}</li>-->
-<!--  </ol>-->
-<!--</nav>-->
+<nav aria-label="breadcrumb" class="pt-1">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'base' %}">Home</a></li>
+    <li class="breadcrumb-item"><a href="{{ product.category.get_absolute_url }}">{{ product.category.name }}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ product.title }}</li>
+  </ol>
+</nav>
 
-<!--<div class="row">-->
-<!--    <div class="col-md-4">-->
-<!--        <img src="{{ product.image.url }}" class="img-fluid">-->
-<!--    </div>-->
-<!--    <div class="col-md-8">-->
-<!--        <h3>{{ product.title }}</h3>-->
-<!--        <p>Price: {{ product.price }}</p>-->
-<!--        <p>Description: {{ product.description }}</p>-->
-<!--        <hr>-->
-<!--        <a href="{% url 'add_to_cart' slug=product.slug %}"><button class="btn btn-danger">Add to cart</button></a>-->
-<!--    </div>-->
-<!--    <p class="mt-4">Характеристики:</p>-->
-<!--    <table class="table">-->
-<!--        <tbody>-->
-<!--        {% for f_name, f_value in product.get_features.items %}-->
-<!--        <tr>-->
-<!--            <th scope="row">{{ f_name }}</th>-->
-<!--            <td>{{ f_value }}</td>-->
-<!--        </tr>-->
-<!--        {% endfor %}-->
-<!--        </tbody>-->
-<!--    </table>-->
+<div class="row">
+    <div class="col-md-4">
+        <img src="{{ product.image.url }}" class="img-fluid">
+    </div>
+    <div class="col-md-8">
+        <h3>{{ product.title }}</h3>
+        <p>Price: {{ product.price }}</p>
+        <p>Description: {{ product.description }}</p>
+        <hr>
+        <a href="{% url 'add_to_cart' slug=product.slug %}"><button class="btn btn-danger">Add to cart</button></a>
+    </div>
+    <p class="mt-4">Характеристики:</p>
+    <table class="table">
+        <tbody>
+        {% for f_name, f_value in product.get_features.items %}
+        <tr>
+            <th scope="row">{{ f_name }}</th>
+            <td>{{ f_value }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
-<!--</div>-->
-
-
-<section class="py-5">
-            <div class="container px-4 px-lg-5 my-5">
-                <div class="row gx-4 gx-lg-5 align-items-center">
-                    <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="https://dummyimage.com/600x700/dee2e6/6c757d.jpg" alt="..." /></div>
-                    <div class="col-md-6">
-                        <div class="small mb-1">SKU: BST-498</div>
-                        <h1 class="display-5 fw-bolder">Shop item template</h1>
-                        <div class="fs-5 mb-5">
-                            <span class="text-decoration-line-through">$45.00</span>
-                            <span>$40.00</span>
-                        </div>
-                        <p class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium at dolorem quidem modi. Nam sequi consequatur obcaecati excepturi alias magni, accusamus eius blanditiis delectus ipsam minima ea iste laborum vero?</p>
-                        <div class="d-flex">
-                            <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem" />
-                            <button class="btn btn-outline-dark flex-shrink-0" type="button">
-                                <i class="bi-cart-fill me-1"></i>
-                                Add to cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
+</div>
 
 {% endblock content %}
