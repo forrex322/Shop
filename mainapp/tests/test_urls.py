@@ -32,7 +32,7 @@ class TestUrls(TestCase):
     def setUp(self) -> None:
         user = User.objects.create(username='testuser', password='password')
         category = Category.objects.create(name='Notebooks', slug='notebooks')
-        image = SimpleUploadedFile("notebook_image.jpg", content=b'', content_type="image/jpg")
+        # image = SimpleUploadedFile("notebook_image.jpg", content=b'', content_type="image/jpg")
         product = Product.objects.create(category=category, title='Macbook', slug='macbook', description='hi', price=Decimal('1200.00'), image=image)
         customer = Customer.objects.create(user=user, phone='123', address='123')
         cart = Cart.objects.create(owner=customer)
