@@ -15,7 +15,7 @@
 
 
 {% block content  %}
-<div class="container">
+<div class="container" style="display: flex; margin-left: 20px;">
     <div class="row">
         <div class="col-lg-3 mt-5">
             <div class="list-group position-absolute">
@@ -28,6 +28,10 @@
         </div>
     </div>
 </div>
+<!-- div для того щоб нормально відображати навігацію Home/Ноутбуки/Macbook -->
+<div class="container px-4 px-lg-5 mt-5">
+    <div class="row gx-4 gx-lg-5 row-cols-2  justify-content-center text-center" style="margin-left: 0px;">
+<!--    вот тут    -->
 <!--TODO: зробити нормальний дизайн, пошук, здвінути бокс з категоріями вліво + написати тести -->
     {% for el in products %}
         <div class="col mb-5">
@@ -67,6 +71,7 @@
       </div>
     {% endfor %}
 {% endif %}
-
+    </div>
+</div>
 {% endblock content %}
 
